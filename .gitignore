@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+# Keep generated audit reports out of this skill repository by default.
+audit-reports/
