@@ -45,6 +45,8 @@ def discover(root: Path) -> dict[Path, set[str]]:
     found: dict[Path, set[str]] = {}
     for current, dirs, names in os.walk(root):
         current_path = Path(current)
+        # Detect .git before filtering hidden/generated directories out of traversal.
+        is_git_root = ".git" in dirs or ".git" in names
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS and not d.startswith(".")]
         files = set(names)
         markers: set[str] = set()
@@ -54,8 +56,8 @@ def discover(root: Path) -> dict[Path, set[str]]:
                     markers.add(label)
             elif marker in files:
                 markers.add(label)
-        if markers or ".git" in dirs or ".git" in files:
-            found[current_path] = markers or {"Repository / project marker"}
+        if markers or is_git_root:
+            found[current_path] = markers or {"Git repository"}
     return found
 
 
